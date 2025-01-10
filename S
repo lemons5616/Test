@@ -65,11 +65,11 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 
 		if settingModule then
 			local settings = require(gun)  -- Require the module script
-			settings.FireRate = 1 / 1000
+			settings.FireRate = 1 / 10000
 			settings.Auto = true
 			settings.BurstFireEnabled = true
 			settings.BulletPerBurst = 1
-			settings.BurstRate = 1 / 1000
+			settings.BurstRate = 1 / 10000
 			print("Test: ".. settings.Ammo)
 		else
 			warn("'Setting' ModuleScript not found in the character.")
