@@ -146,27 +146,30 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Attempt to bypass safe checks for duplication
 		local argsStore = {
-			[1] = "Store",  -- Hypothetical store command
+			[1] = "Change",  -- Hypothetical store command
 			[2] = tool.Name,
-			[3] = "Safe",
+			[3] = "Backpack",
 			[4] = safe
 		}
 
 		-- Store the tool in the safe
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsStore))
 
-		task.wait()
+		task.wait(0.1)
 
 		-- Attempt to withdraw the tool from the safe (dupe attempt)
 		local argsWithdraw = {
-			[1] = "Withdraw",
+			[1] = "Change",
 			[2] = tool.Name,
-			[3] = "Safe",
+			[3] = "Inv",
 			[4] = safe
 		}
 
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsWithdraw))
-
+		for i = 1, 3 do
+			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsWithdraw))
+			task.wait(0.01) -- Adding a small wait between attempts (adjustable if needed)
+		end
+		
 		print("Duplication attempt completed.")
 	else
 		warn("Tool or Safe not found.")
