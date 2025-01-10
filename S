@@ -82,19 +82,6 @@ end)
 PlayerSection:NewButton("Infinite Sleep", "So you don't need to sleep anymore.", function()
 	local SleepSystem = shared.SleepSystem
 
-	-- Override Wake to do nothing
-	SleepSystem.Wake = function(arg1, arg2)
-		-- Prevent waking up
-	end
-
-	-- Override Sleep to ignore wokeness
-	local originalSleep = SleepSystem.Sleep
-	SleepSystem.Sleep = function(self, arg1, arg2, arg3)
-		shared.Wokeness = 0 -- Ensure you can always sleep
-		shared.Sleeping = true -- Force sleep state
-		originalSleep(self, arg1, arg2, arg3)
-	end
-
 	-- Optional: Force sleep immediately
 	if not shared.Sleeping then
 		local character = game.Players.LocalPlayer.Character
