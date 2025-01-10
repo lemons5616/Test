@@ -79,6 +79,31 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 	end
 end)
 
+PlayerSection:NewButton("Infinite Sleep", "So you don't need to sleep anymore.", function()
+	local SleepSystem = shared.SleepSystem
+
+	-- Override Wake to do nothing
+	SleepSystem.Wake = function(arg1, arg2)
+		-- Prevent waking up
+	end
+
+	-- Override Sleep to ignore wokeness
+	local originalSleep = SleepSystem.Sleep
+	SleepSystem.Sleep = function(self, arg1, arg2, arg3)
+		shared.Wokeness = 0 -- Ensure you can always sleep
+		shared.Sleeping = true -- Force sleep state
+		originalSleep(self, arg1, arg2, arg3)
+	end
+
+	-- Optional: Force sleep immediately
+	if not shared.Sleeping then
+		local character = game.Players.LocalPlayer.Character
+		if character then
+			SleepSystem:Sleep(character, workspace:WaitForChild("Beds"):FindFirstChildOfClass("Model"))
+		end
+	end
+end)
+
 UtilitySection:NewButton("Instant Interact", "No waiting when interacting.", function()
 	for _, prompt in pairs(game:GetDescendants()) do
 		if prompt:IsA("ProximityPrompt") then
@@ -119,7 +144,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsBackpack))
 
 		-- Re-equip the tool
-		task.delay(0.5, function()
+		task.delay(1, function()
 			player.Character.Humanoid:EquipTool(tool)
 		end)
 	else
