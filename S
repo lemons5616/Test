@@ -156,9 +156,11 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[3] = "Backpack",
 			[4] = safe
 		}
-
+		
 		-- Fire the backpack event for the tool
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsBackpack))
+		
+		task.wait(0.1)
 		
 		local argsInv = {
 			[1] = "Change",
