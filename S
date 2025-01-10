@@ -147,6 +147,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Unequip the current tool
 		player.Character.Humanoid:UnequipTools()
 		
+		task.wait(0.2)
+		
 		-- Prepare arguments for the backpack event
 		local argsBackpack = {
 			[1] = "Change",
@@ -169,7 +171,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		
 		for i = 1, 3 do
 			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsInv))
-			task.wait(0.01) -- Adding a small wait between attempts (adjustable if needed)
 		end
 	else
 		warn("Tool or Safe not found.")
