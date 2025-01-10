@@ -126,7 +126,7 @@ end)
 
 ExploitSection:NewButton("GrapeDrank", "GrapeDrank", function()
 	-- Assuming the module is stored in shared.ShopModule or replace with actual module path
-	local ShopModule = require(shared.ShopModule) -- Update to actual module location
+	local ShopModule = require(game.ReplicatedStorage:WaitForChild("ShopModule")) -- Update to actual module location
 
 	-- Set GrapeDrank to free
 	if ShopModule and ShopModule.GrapeDrank then
