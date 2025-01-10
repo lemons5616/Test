@@ -126,15 +126,13 @@ end)
 
 ExploitSection:NewButton("GrapeDrank", "GrapeDrank", function()
 	-- Assuming the module is stored in shared.ShopModule or replace with actual module path
-	local ShopModule = require(game.ReplicatedStorage:WaitForChild("ShopModule")) -- Update to actual module location
+	local ShopModule = require(game.ReplicatedStorage:WaitForChild("ExoticTools")) -- Update to actual module location
 
 	-- Set GrapeDrank to free
 	if ShopModule and ShopModule.GrapeDrank then
 		ShopModule.GrapeDrank.Price = 0 -- Set price to free
 	end
-	
-	task.wait(1)
-	
+		
 	local args = {
 		[1] = "GrapeDrank"
 	}
@@ -142,7 +140,7 @@ ExploitSection:NewButton("GrapeDrank", "GrapeDrank", function()
 	game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
 
 	-- Optionally print confirmation
-	print("GrapeDrank is now free.")
+	print("Got Grape Drank for free.")
 
 end)
 
