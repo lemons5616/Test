@@ -79,31 +79,6 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 	end
 end)
 
-PlayerSection:NewButton("Infinite Sleep", "So you don't need to sleep anymore.", function()
-	local SleepSystem = shared.SleepSystem
-
-	-- Override Wake to do nothing
-	SleepSystem.Wake = function()
-		-- Prevent waking up
-	end
-
-	-- Automatically set to sleeping state
-	shared.Sleeping = true
-
-	-- Optionally bypass wokeness check if needed
-	shared.Wokeness = 0
-
-	-- Silent sleep using Play method without any checks
-	local player = game.Players.LocalPlayer
-	local character = player.Character or player.CharacterAdded:Wait()
-	local humanoid = character:WaitForChild("Humanoid")
-
-	-- Trigger the SleepSystem play function directly for silent sleep
-	if humanoid then
-		SleepSystem:Play(humanoid, character)
-	end
-end)
-
 UtilitySection:NewButton("Instant Interact", "No waiting when interacting.", function()
 	for _, prompt in pairs(game:GetDescendants()) do
 		if prompt:IsA("ProximityPrompt") then
@@ -131,6 +106,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Unequip the current tool
 		player.Character.Humanoid:UnequipTools()
+		
+		task.wait(0.5)
 
 		-- Prepare arguments for the backpack event
 		local argsBackpack = {
@@ -142,14 +119,31 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Fire the backpack event for the tool
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsBackpack))
-
-		-- Re-equip the tool
-		task.delay(1, function()
-			player.Character.Humanoid:EquipTool(tool)
-		end)
 	else
 		warn("Tool or Safe not found.")
 	end
+end)
+
+ExploitSection:NewButton("GrapeDrank", "GrapeDrank", function()
+	-- Assuming the module is stored in shared.ShopModule or replace with actual module path
+	local ShopModule = require(shared.ShopModule) -- Update to actual module location
+
+	-- Set GrapeDrank to free
+	if ShopModule and ShopModule.GrapeDrank then
+		ShopModule.GrapeDrank.Price = 0 -- Set price to free
+	end
+	
+	task.wait(1)
+	
+	local args = {
+		[1] = "GrapeDrank"
+	}
+
+	game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+
+	-- Optionally print confirmation
+	print("GrapeDrank is now free.")
+
 end)
 
 
