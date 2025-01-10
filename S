@@ -1,0 +1,130 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Tha Bronx", "DarkTheme")
+local Combat = Window:NewTab("Combat")
+local Player = Window:NewTab("Player")
+local Utility = Window:NewTab("Utility")
+local Exploit = Window:NewTab("Exploit")
+
+local GunModSection = Combat:NewSection("Gun Mods")
+local PlayerSection = Player:NewSection("Player Modifications")
+local UtilitySection = Utility:NewSection("Utility")
+local ExploitSection = Exploit:NewSection("Useful Exploits")
+
+GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.", function()
+	local function findModuleScriptInCharacter(character, moduleName)
+		for _, descendant in ipairs(character:GetDescendants()) do
+			if descendant:IsA("ModuleScript") and descendant.Name == moduleName then
+				return descendant
+			end
+		end
+		return nil  -- Return nil if not found
+	end
+
+	local Players = game:GetService("Players")
+	local Workspace = game:GetService("Workspace")
+
+	local localPlayer = Players.LocalPlayer  -- Get the local player
+	if localPlayer then
+		local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()  -- Wait if character not yet loaded
+		local settingModule = findModuleScriptInCharacter(character, "Setting")
+		local gun = settingModule  -- Assigning the found moduleScript to 'gun'
+
+		if settingModule then
+			local settings = require(gun)  -- Require the module script
+			settings.LimitedAmmoEnabled = false
+			settings.AmmoPerMag = 999999
+			settings.Ammo = 999999
+			settings.MaxAmmo = 999999
+		else
+			warn("'Setting' ModuleScript not found in the character.")
+		end
+	else
+		warn("LocalPlayer not found.")
+	end
+end)
+
+GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", function()
+	local function findModuleScriptInCharacter(character, moduleName)
+		for _, descendant in ipairs(character:GetDescendants()) do
+			if descendant:IsA("ModuleScript") and descendant.Name == moduleName then
+				return descendant
+			end
+		end
+		return nil  -- Return nil if not found
+	end
+
+	-- Main execution
+	local Players = game:GetService("Players")
+	local Workspace = game:GetService("Workspace")
+
+	local localPlayer = Players.LocalPlayer  -- Get the local player
+	if localPlayer then
+		local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()  -- Wait if character not yet loaded
+		local settingModule = findModuleScriptInCharacter(character, "Setting")
+		local gun = settingModule  -- Assigning the found moduleScript to 'gun'
+
+		if settingModule then
+			local settings = require(gun)  -- Require the module script
+			settings.FireRate = 1 / 1000
+			settings.Auto = true
+			settings.BurstFireEnabled = true
+			settings.BulletPerBurst = 1
+			settings.BurstRate = 1 / 1000
+			print("Test: ".. settings.Ammo)
+		else
+			warn("'Setting' ModuleScript not found in the character.")
+		end
+	else
+		warn("LocalPlayer not found.")
+	end
+end)
+
+UtilitySection:NewButton("Instant Interact", "No waiting when interacting.", function()
+	for _, prompt in pairs(game:GetDescendants()) do
+		if prompt:IsA("ProximityPrompt") then
+			prompt.HoldDuration = 0
+		end
+	end
+
+
+	game.DescendantAdded:Connect(function(descendant)
+		if descendant:IsA("ProximityPrompt") then
+			descendant.HoldDuration = 0
+		end
+	end)
+end)
+
+ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
+	local player = game:GetService("Players").LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local tool = character:FindFirstChildOfClass("Tool")
+	local safe = workspace:WaitForChild("1# Map"):WaitForChild("Safe")
+
+	if tool and safe then
+		-- Teleport to the safe chest clicker frame
+		character.HumanoidRootPart.CFrame = safe:WaitForChild("ChestClicker").CFrame
+
+		-- Unequip the current tool
+		player.Character.Humanoid:UnequipTools()
+
+		-- Prepare arguments for the backpack event
+		local argsBackpack = {
+			[1] = "Change",
+			[2] = tool.Name, -- Uses the name of the current tool
+			[3] = "Backpack",
+			[4] = safe
+		}
+
+		-- Fire the backpack event for the tool
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsBackpack))
+
+		-- Re-equip the tool
+		task.delay(0.5, function()
+			player.Character.Humanoid:EquipTool(tool)
+		end)
+	else
+		warn("Tool or Safe not found.")
+	end
+end)
+
+
