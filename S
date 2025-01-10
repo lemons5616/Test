@@ -45,7 +45,37 @@ GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.",
 end)
 
 EnviromentSection:NewButton("FastFists", "No delay when using fists.", function()
-	
+	-- Script to find LocalPlayer's 'Setting' ModuleScript in Workspace
+
+	-- Define a function to find a module script by name in a given model
+	local function findModuleScriptInCharacter(character, moduleName)
+		for _, descendant in ipairs(character:GetDescendants()) do
+			if descendant:IsA("ModuleScript") and descendant.Name == moduleName then
+				return descendant
+			end
+		end
+		return nil  -- Return nil if not found
+	end
+
+	-- Main execution
+	local Players = game:GetService("Players")
+	local Workspace = game:GetService("Workspace")
+
+	local localPlayer = Players.LocalPlayer  -- Get the local player
+	if localPlayer then
+		local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()  -- Wait if character not yet loaded
+		local settingModule = findModuleScriptInCharacter(character, "Melee_Settings")
+		local punch = settingModule  -- Assigning the found moduleScript to 'gun'
+
+		if settingModule then
+			local punchSettings = require(punch)
+			punchSettings.AttackCooldown = 1 / 100
+		else
+			warn("'Setting' ModuleScript not found in the character.")
+		end
+	else
+		warn("LocalPlayer not found.")
+	end
 end)
 
 GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", function()
