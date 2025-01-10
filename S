@@ -160,7 +160,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Fire the backpack event for the tool
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsBackpack))
 		
-		task.wait(3)
+		task.wait(0.75)
 		
 		local args = {
 			[1] = "Change",
@@ -168,8 +168,10 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[3] = "Inv",
 			[4] = safe
 		}
-
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
+		
+		for i = 1, 10 do
+			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
+		end
 	else
 		warn("Tool or Safe not found.")
 	end
