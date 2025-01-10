@@ -82,11 +82,25 @@ end)
 PlayerSection:NewButton("Infinite Sleep", "So you don't need to sleep anymore.", function()
 	local SleepSystem = shared.SleepSystem
 
-	local originalSleep = SleepSystem.Sleep
-	SleepSystem.Sleep = function(self, arg1, arg2, arg3)
-		shared.Wokeness = 0 -- Ensure you can always sleep
-		shared.Sleeping = true -- Force sleep state
-		originalSleep(self, arg1, arg2, arg3)
+	-- Override Wake to do nothing
+	SleepSystem.Wake = function()
+		-- Prevent waking up
+	end
+
+	-- Automatically set to sleeping state
+	shared.Sleeping = true
+
+	-- Optionally bypass wokeness check if needed
+	shared.Wokeness = 0
+
+	-- Silent sleep using Play method without any checks
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+
+	-- Trigger the SleepSystem play function directly for silent sleep
+	if humanoid then
+		SleepSystem:Play(humanoid, character)
 	end
 end)
 
