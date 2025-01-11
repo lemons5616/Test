@@ -9,6 +9,7 @@ local GunModSection = Combat:NewSection("Gun Mods")
 local EnviromentSection = Combat:NewSection("Environment")
 local PlayerSection = Player:NewSection("Player Modifications")
 local UtilitySection = Utility:NewSection("Utility")
+local PurchasingSection = Utility:NewSection("Purchasing")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
 GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.", function()
@@ -119,6 +120,40 @@ PlayerSection:NewButton("NoFallDamage", "Makes the player take no fall damage wh
 	game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll.Damage:Destroy()
 end)
 
+PlayerSection:NewDropdown("Teleport To", "Select a player to teleport to.", {}, function(selectedPlayer)
+	local Players = game:GetService("Players")
+	local localPlayer = Players.LocalPlayer
+	local targetPlayer = Players:FindFirstChild(selectedPlayer)
+
+	if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+		local targetPosition = targetPlayer.Character.HumanoidRootPart.CFrame
+		localPlayer.Character:SetPrimaryPartCFrame(targetPosition)
+	else
+		warn("Target player or their HumanoidRootPart not found.")
+	end
+end)
+
+-- Auto-update the dropdown with player names
+game:GetService("Players").PlayerAdded:Connect(function(player)
+	PlayerSection:UpdateDropdown("Teleport To", table.concat(game.Players:GetPlayers(), ", "), player.Name)
+end)
+
+game:GetService("Players").PlayerRemoving:Connect(function(player)
+	local playersList = {}
+	for _, p in ipairs(game.Players:GetPlayers()) do
+		if p ~= player then
+			table.insert(playersList, p.Name)
+		end
+	end
+	PlayerSection:UpdateDropdown("Teleport To", playersList)
+end)
+
+local initialPlayersList = {}
+for _, player in ipairs(game.Players:GetPlayers()) do
+	table.insert(initialPlayersList, player.Name)
+end
+PlayerSection:UpdateDropdown("Teleport To", initialPlayersList)
+
 UtilitySection:NewButton("Instant Interact", "No waiting when interacting.", function()
 	for _, prompt in pairs(game:GetDescendants()) do
 		if prompt:IsA("ProximityPrompt") then
@@ -134,43 +169,48 @@ UtilitySection:NewButton("Instant Interact", "No waiting when interacting.", fun
 	end)
 end)
 
+PurchasingSection:NewButton("BuyGrape", "You don't need to go with the exotic dealer anymore.", function()
+	local args = {
+		[1] = "GrapeDrank"
+	}
+
+	game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+end)
+
+PurchasingSection:NewButton("BuyRice", "You don't need to go with the exotic dealer anymore.", function()
+	local args = {
+		[1] = "RiceBag"
+	}
+
+	game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+end)
+
+PurchasingSection:NewButton("BuySeeds", "You don't need to go with the exotic dealer anymore.", function()
+	local args = {
+		[1] = "Seeds"
+	}
+
+	game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+end)
+
 ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
-	local tool = character:FindFirstChildOfClass("Tool")
+
+	-- Unequip all tools
+	character.Humanoid:UnequipTools()
+
+	-- Get the safes
 	local safesContainer = workspace:WaitForChild("1# Map"):WaitForChild("2 Crosswalks"):WaitForChild("Safes")
 	local safes = safesContainer:GetChildren()
-	local originalPosition = character.HumanoidRootPart.CFrame
 
-	local function getNearestSafe()
-		local nearestSafe = nil
-		local shortestDistance = math.huge
-		for _, safe in ipairs(safes) do
-			local chestClicker = safe:FindFirstChild("ChestClicker")
-			if chestClicker then
-				local distance = (chestClicker.Position - originalPosition.Position).Magnitude
-				if distance < shortestDistance then
-					shortestDistance = distance
-					nearestSafe = safe
-				end
-			end
-		end
-		return nearestSafe
-	end
+	-- Ensure there are safes available
+	if #safes > 0 then
+		-- Choose a random safe
+		local randomSafe = safes[math.random(1, #safes)]
 
-	if tool and #safes > 0 then
-		local nearestSafe = getNearestSafe()
-		
-		local fakeArgsBackpack = {
-			[1] = "Change",
-			[2] = tool.Name,
-			[3] = "Backpack",
-			[4] = nearestSafe
-		}
-
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
-	else
-		warn("Tool not found or no safes available.")
+		-- Teleport the player to the random safe's position
+		character:SetPrimaryPartCFrame(randomSafe.PrimaryPart.CFrame)
 	end
 end)
 
