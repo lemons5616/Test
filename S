@@ -138,76 +138,47 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
 	local tool = character:FindFirstChildOfClass("Tool")
-	local safesContainer = workspace:WaitForChild("1# Map"):WaitForChild("2 Crosswalks"):WaitForChild("Safes")
-	local safes = safesContainer:GetChildren()
-	local originalPosition = character.HumanoidRootPart.CFrame
+	local safe = workspace:WaitForChild("1# Map"):WaitForChild("Safe")
 
-	local function getNearestSafe()
-		local nearestSafe = nil
-		local shortestDistance = math.huge
-		for _, safe in ipairs(safes) do
-			local chestClicker = safe:FindFirstChild("ChestClicker")
-			if chestClicker then
-				local distance = (chestClicker.Position - originalPosition.Position).Magnitude
-				if distance < shortestDistance then
-					shortestDistance = distance
-					nearestSafe = safe
-				end
-			end
-		end
-		return nearestSafe
-	end
+	if tool and safe then
+		-- Teleport to the safe chest clicker frame
+		character.HumanoidRootPart.CFrame = safe:WaitForChild("ChestClicker").CFrame
 
-	if tool and #safes > 0 then
-		-- Unequip the current tool first
+		-- Unequip the current tool
 		player.Character.Humanoid:UnequipTools()
+
 		task.wait(0.5)
 
-		-- Choose a random safe
-		local randomSafe = safes[math.random(1, #safes)]
-		local randomChestClicker = randomSafe:FindFirstChild("ChestClicker")
+		-- Clone the tool to simulate duplication
+		local clonedTool = tool:Clone()
+		clonedTool.Parent = character -- Place the cloned tool in the character
 
-		if randomChestClicker then
-			-- Teleport to the random safe
-			character.HumanoidRootPart.CFrame = randomChestClicker.CFrame
-			
-			task.wait(0.5)
+		-- Create arguments to send the original tool to replicated storage
+		local argsOriginalToStorage = {
+			[1] = "Change",
+			[2] = tool.Name, -- Use the original tool name
+			[3] = "Backpack",
+			[4] = safe
+		}
 
-			local fakeArgsBackpack = {
-				[1] = "Change",
-				[2] = tool.Name,
-				[3] = "Backpack",
-				[4] = randomSafe
-			}
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsOriginalToStorage))
+		task.wait(2)
 
-			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
-			task.wait(2)
+		-- Create arguments to send the cloned tool
+		local argsCloneToInv = {
+			[1] = "Change",
+			[2] = clonedTool.Name, -- Use the cloned tool name
+			[3] = "Inv",
+			[4] = safe
+		}
 
-			-- Teleport back to the original position
-			character.HumanoidRootPart.CFrame = originalPosition
+		-- Fire the inventory event with the clone tool
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsCloneToInv))
 
-			-- Find the nearest safe to the original position
-			local nearestSafe = getNearestSafe()
-			local nearestChestClicker = nearestSafe and nearestSafe:FindFirstChild("ChestClicker")
-			
-			task.wait(0.5)
-
-			local fakeArgsInv = {
-				[1] = "Change",
-				[2] = tool.Name,
-				[3] = "Inv",
-				[4] = nearestSafe
-			}
-
-			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
-			print("Duplication attempt using fake item completed.")
-		else
-			warn("ChestClicker not found in the random safe.")
-		end
+		print("Duplication attempt using cloned item completed.")
 	else
-		warn("Tool not found or no safes available.")
+		warn("Tool or Safe not found.")
 	end
 end)
-
 
 
