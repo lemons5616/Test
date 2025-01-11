@@ -154,23 +154,9 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = safe
 		}
 
-		-- Prepare arguments to simulate duplication using a fake clone
-		local clonedTool = tool:Clone()
-		clonedTool.Name = "Fake" .. tool.Name
-
-		local argsFakeToInv = {
-			[1] = "Change",
-			[2] = clonedTool.Name, -- Use the fake cloned tool name
-			[3] = "Inv",
-			[4] = safe
-		}
-
 		-- Fire requests to replicate the duplication effect
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsOriginalToStorage))
 		task.wait(2)
-
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsFakeToInv))
-		task.wait(1)
 
 		-- Return the original tool to the character to complete the dupe process
 		tool.Parent = character
