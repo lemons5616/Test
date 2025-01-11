@@ -120,19 +120,6 @@ PlayerSection:NewButton("NoFallDamage", "Makes the player take no fall damage wh
 	game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll.Damage:Destroy()
 end)
 
-PlayerSection:NewDropdown("Teleport To", "Select a player to teleport to.", {}, function(selectedPlayer)
-	local Players = game:GetService("Players")
-	local localPlayer = Players.LocalPlayer
-	local targetPlayer = Players:FindFirstChild(selectedPlayer)
-
-	if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-		local targetPosition = targetPlayer.Character.HumanoidRootPart.CFrame
-		localPlayer.Character:SetPrimaryPartCFrame(targetPosition)
-	else
-		warn("Target player or their HumanoidRootPart not found.")
-	end
-end)
-
 PurchasingSection:NewButton("BuyGrape", "You don't need to go with the exotic dealer anymore.", function()
 	local args = {
 		[1] = "GrapeDrank"
