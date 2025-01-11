@@ -144,8 +144,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Unequip the current tool to start the duplication process
 		player.Character.Humanoid:UnequipTools()
 
-		task.wait(0.5)
-
 		-- Prepare arguments for sending the original tool to storage
 		local argsOriginalToStorage = {
 			[1] = "Change",
@@ -154,17 +152,20 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = safe
 		}
 
-		-- Fire requests to replicate the duplication effect
+		-- Send the original tool to storage
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsOriginalToStorage))
+
+		-- Wait before returning the tool to the backpack
 		task.wait(2)
 
-		-- Return the original tool to the character to complete the dupe process
-		tool.Parent = character
+		-- Move the tool back to the player's backpack
+		tool.Parent = player.Backpack
 
 		print("Item duplication attempt completed.")
 	else
 		warn("Tool or Safe not found.")
 	end
 end)
+
 
 
