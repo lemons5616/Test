@@ -13,9 +13,15 @@ local PurchasingSection = Utility:NewSection("Purchasing")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
 local ricePurchaseCount = 0  -- Keeps track of rice purchases
+local grapePurchaseCount = 0
+local seedsPurchaseCount = 0
 local riceBuyLocation = CFrame.new(51373.3594, 21680.2383, 5842.92969, 0.986435831, -1.52454032e-08, -0.164147288, 1.49616994e-08, 1, -2.96470071e-09, 0.164147288, 4.68564743e-10, 0.986435831)
 local buyRicePrompt = workspace:WaitForChild("GUNS"):WaitForChild("RiceBag"):WaitForChild("Over"):WaitForChild("Sign"):WaitForChild("BuyPrompt")
+local seedsBuyLocation = CFrame.new(-1539.0968, 282.439026, -991.320923, 0.0827591121, 3.31818448e-08, -0.996569574, 3.25935581e-08, 1, 3.60027634e-08, 0.996569574, -3.5461305e-08, 0.0827591121)
+local buySeedsPrompt = workspace:WaitForChild("GUNS"):WaitForChild("Seeds"):WaitForChild("Bag"):WaitForChild("BuyPrompt")
 local ricePrice = 3500
+local grapePrice = 500
+local seedsPrice = 1000
 
 local function createWarningGui(message)
 	local screenGui = Instance.new("ScreenGui")
@@ -146,12 +152,20 @@ PlayerSection:NewButton("NoFallDamage", "Makes the player take no fall damage wh
 end)
 
 PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seeds"}, function(currentOption)
-	if (currentOption == "GrapeDrank") then
-		local args = {
-			[1] = "GrapeDrank"
-		}
+	local playerMoney = game:GetService("Players").LocalPlayer.stored.Money.Value -- Fetch the actual numeric value
 
-		game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+	if (currentOption == "GrapeDrank") then
+		for i = 1, grapePurchaseCount do
+			if playerMoney >= grapePrice then
+				local args = {
+					[1] = "GrapeDrank"
+				}
+
+				game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+			else
+				createWarningGui("Not enough money to buy grape drank!")
+			end
+		end
 	elseif (currentOption == "Rice") then
 		if ricePurchaseCount <= 0 then
 			warn("Set a value greater than 0 to buy rice.")
@@ -165,50 +179,84 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 			return
 		end
 
-		local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
+		-- Only teleport if player has enough money
+		if playerMoney >= ricePrice then
+			local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
+			character.HumanoidRootPart.CFrame = riceBuyLocation -- Teleport to rice buy location
 
-		-- Teleport to buy location
-		character.HumanoidRootPart.CFrame = riceBuyLocation
-
-
-		-- Loop to buy rice
-		for i = 1, ricePurchaseCount do
-			local playerMoney = game:GetService("Players").LocalPlayer.stored.Money.Value -- Fetch the actual numeric value
-
-			if playerMoney >= ricePrice then
+			for i = 1, ricePurchaseCount do
 				if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
-					local holdTime = buyRicePrompt.HoldDuration or 0 -- Get the hold duration or default to 0
-					buyRicePrompt:InputHoldBegin() -- Trigger the start of the prompt
+					local holdTime = buyRicePrompt.HoldDuration or 0
+					buyRicePrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime) -- Wait for the hold duration
+						wait(holdTime)
 					else
-						wait(2) -- Wait 2 seconds if holdTime is 0
+						wait(2)
 					end
-					buyRicePrompt:InputHoldEnd() -- Trigger the end of the prompt
-					wait(0.2) -- Small delay between purchases
+					buyRicePrompt:InputHoldEnd()
+					wait(0.2)
 				else
 					warn("BuyPrompt not found or incorrect type.")
 					break
 				end
-			else
-				createWarningGui("Not enough money to buy rice!")
-				break -- Stop buying if there's not enough money
 			end
+
+			character.HumanoidRootPart.CFrame = originalPosition -- Return to original position
+		else
+			createWarningGui("Not enough money to buy rice!")
+		end
+	elseif (currentOption == "Seeds") then
+		if seedsPurchaseCount <= 0 then
+			warn("Set a value greater than 0 to buy seeds.")
+			return
 		end
 
-		-- Teleport back to the original position
-		character.HumanoidRootPart.CFrame = originalPosition
-	elseif (currentOption == "Seeds") then
-		local args = {
-			[1] = "Seeds"
-		}
+		local player = game.Players.LocalPlayer
+		local character = player.Character
+		if not character or not character:FindFirstChild("HumanoidRootPart") then
+			warn("Character or HumanoidRootPart not found.")
+			return
+		end
 
-		game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+		-- Only teleport if player has enough money
+		if playerMoney >= seedsPrice then
+			local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
+			character.HumanoidRootPart.CFrame = seedsBuyLocation -- Teleport to seeds buy location
+
+			for i = 1, seedsPurchaseCount do
+				if buySeedsPrompt and buySeedsPrompt:IsA("ProximityPrompt") then
+					local holdTime = buySeedsPrompt.HoldDuration or 0
+					buySeedsPrompt:InputHoldBegin()
+					if holdTime > 0 then
+						wait(holdTime)
+					else
+						wait(2)
+					end
+					buySeedsPrompt:InputHoldEnd()
+					wait(0.2)
+				else
+					warn("BuyPrompt not found or incorrect type.")
+					break
+				end
+			end
+
+			character.HumanoidRootPart.CFrame = originalPosition -- Return to original position
+		else
+			createWarningGui("Not enough money to buy seeds!")
+		end
 	end
+end)
+
+PurchasingSection:NewSlider("GrapeQuantity", "Select how many times to buy grape dranks", 100, 1, function(sliderValue)
+	grapePurchaseCount = sliderValue
 end)
 
 PurchasingSection:NewSlider("RiceQuantity", "Select how many times to buy rice", 100, 1, function(sliderValue)
 	ricePurchaseCount = sliderValue
+end)
+
+PurchasingSection:NewSlider("SeedsQuantity", "Select how many times to buy seeds", 100, 1, function(sliderValue)
+	seedsPurchaseCount = sliderValue
 end)
 
 -- Define teleport locations
