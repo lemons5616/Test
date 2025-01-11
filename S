@@ -15,6 +15,27 @@ local ExploitSection = Exploit:NewSection("Useful Exploits")
 local ricePurchaseCount = 0  -- Keeps track of rice purchases
 local riceBuyLocation = CFrame.new(51373.3594, 21680.2383, 5842.92969, 0.986435831, -1.52454032e-08, -0.164147288, 1.49616994e-08, 1, -2.96470071e-09, 0.164147288, 4.68564743e-10, 0.986435831)
 local buyRicePrompt = workspace:WaitForChild("GUNS"):WaitForChild("RiceBag"):WaitForChild("Over"):WaitForChild("Sign"):WaitForChild("BuyPrompt")
+local ricePrice = 3500
+
+local function createWarningGui(message)
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") -- Add GUI to player's screen
+
+	local textLabel = Instance.new("TextLabel")
+	textLabel.Size = UDim2.new(0.3, 0, 0.05, 0)
+	textLabel.Position = UDim2.new(0.35, 0, 0.9, 0)
+	textLabel.BackgroundTransparency = 0.3
+	textLabel.BackgroundColor3 = Color3.new(1, 0, 0) -- Red background for warning
+	textLabel.Text = message
+	textLabel.TextScaled = true
+	textLabel.TextColor3 = Color3.new(1, 1, 1)
+	textLabel.Parent = screenGui
+
+	-- Remove the GUI after 1 second
+	delay(1, function()
+		screenGui:Destroy()
+	end)
+end
 
 GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.", function()
 	local function findModuleScriptInCharacter(character, moduleName)
@@ -149,16 +170,29 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 		-- Teleport to buy location
 		character.HumanoidRootPart.CFrame = riceBuyLocation
 
+
+		-- Loop to buy rice
 		for i = 1, ricePurchaseCount do
-			if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
-				local holdTime = buyRicePrompt.HoldDuration or 0 -- Get the hold duration or default to 0
-				buyRicePrompt:InputHoldBegin() -- Trigger the start of the prompt
-				wait(holdTime) -- Wait for the hold duration
-				buyRicePrompt:InputHoldEnd() -- Trigger the end of the prompt
-				wait(0.2) -- Small delay between purchases
+			local playerMoney = game:GetService("Players").LocalPlayer.stored.Money -- Fetch player's current money
+
+			if playerMoney >= ricePrice then
+				if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
+					local holdTime = buyRicePrompt.HoldDuration or 0 -- Get the hold duration or default to 0
+					buyRicePrompt:InputHoldBegin() -- Trigger the start of the prompt
+					if holdTime > 0 then
+						wait(holdTime) -- Wait for the hold duration
+					else
+						wait(2) -- Wait 2 seconds if holdTime is 0
+					end
+					buyRicePrompt:InputHoldEnd() -- Trigger the end of the prompt
+					wait(0.2) -- Small delay between purchases
+				else
+					warn("BuyPrompt not found or incorrect type.")
+					break
+				end
 			else
-				warn("BuyPrompt not found or incorrect type.")
-				break
+				createWarningGui("Not enough money to buy rice!")
+				break -- Stop buying if there's not enough money
 			end
 		end
 
@@ -173,7 +207,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 	end
 end)
 
-PurchasingSection:NewSlider("HowManyRice", "Select how many times to buy rice", 100, 1, function(sliderValue)
+PurchasingSection:NewSlider("RiceQuantity", "Select how many times to buy rice", 100, 1, function(sliderValue)
 	ricePurchaseCount = sliderValue
 end)
 
