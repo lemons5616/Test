@@ -173,7 +173,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 	end
 end)
 
-PurchasingSection:NewSlider("HowManyRice", "Select how many times to buy rice", 500, 0, function(sliderValue)
+PurchasingSection:NewSlider("HowManyRice", "Select how many times to buy rice", 100, 1, function(sliderValue)
 	ricePurchaseCount = sliderValue
 end)
 
