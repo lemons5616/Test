@@ -153,11 +153,13 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 		-- Teleport to buy location
 		character.HumanoidRootPart.CFrame = riceBuyLocation
 
-		-- Perform the buying sequence using the BuyPrompt
 		for i = 1, ricePurchaseCount do
 			if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
-				fireproximityprompt(buyRicePrompt)  -- Trigger the BuyPrompt
-				wait(0.2)  -- Adjust delay if necessary
+				local holdTime = buyRicePrompt.HoldDuration or 0 -- Get the hold duration or default to 0
+				buyRicePrompt:InputHoldBegin() -- Trigger the start of the prompt
+				wait(holdTime) -- Wait for the hold duration
+				buyRicePrompt:InputHoldEnd() -- Trigger the end of the prompt
+				wait(0.2) -- Small delay between purchases
 			else
 				warn("BuyPrompt not found or incorrect type.")
 				break
