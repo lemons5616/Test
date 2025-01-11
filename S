@@ -133,42 +133,6 @@ PlayerSection:NewDropdown("Teleport To", "Select a player to teleport to.", {}, 
 	end
 end)
 
--- Auto-update the dropdown with player names
-game:GetService("Players").PlayerAdded:Connect(function(player)
-	PlayerSection:UpdateDropdown("Teleport To", table.concat(game.Players:GetPlayers(), ", "), player.Name)
-end)
-
-game:GetService("Players").PlayerRemoving:Connect(function(player)
-	local playersList = {}
-	for _, p in ipairs(game.Players:GetPlayers()) do
-		if p ~= player then
-			table.insert(playersList, p.Name)
-		end
-	end
-	PlayerSection:UpdateDropdown("Teleport To", playersList)
-end)
-
-local initialPlayersList = {}
-for _, player in ipairs(game.Players:GetPlayers()) do
-	table.insert(initialPlayersList, player.Name)
-end
-PlayerSection:UpdateDropdown("Teleport To", initialPlayersList)
-
-UtilitySection:NewButton("Instant Interact", "No waiting when interacting.", function()
-	for _, prompt in pairs(game:GetDescendants()) do
-		if prompt:IsA("ProximityPrompt") then
-			prompt.HoldDuration = 0
-		end
-	end
-
-
-	game.DescendantAdded:Connect(function(descendant)
-		if descendant:IsA("ProximityPrompt") then
-			descendant.HoldDuration = 0
-		end
-	end)
-end)
-
 PurchasingSection:NewButton("BuyGrape", "You don't need to go with the exotic dealer anymore.", function()
 	local args = {
 		[1] = "GrapeDrank"
