@@ -146,44 +146,39 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Unequip the current tool
 		player.Character.Humanoid:UnequipTools()
+		
+		task.wait(0.25)
 
-		task.wait(0.5)
-
-		-- Clone the tool to simulate duplication
-		local clonedTool = tool:Clone()
-		clonedTool.Parent = character -- Place the cloned tool in the character
-
-		-- Create arguments to send the fake tool (clone) to the backpack
-		local argsFakeToBackpack = {
+		-- Create a fake item for duplication attempt
+		local fakeArgsBackpack = {
 			[1] = "Change",
-			[2] = clonedTool.Name, -- Use the cloned tool name
+			[2] = tool.Name, -- Use the fake item name
 			[3] = "Backpack",
 			[4] = safe
 		}
 
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsFakeToBackpack))
+		-- Fire the backpack event with the fake item name
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
+
 		task.wait(2)
 
-		-- Create arguments to send the original tool to inventory
-		local argsOriginalToInv = {
+		local fakeArgsInv = {
 			[1] = "Change",
-			[2] = tool.Name, -- Use the original tool name
+			[2] = tool.Name, -- Use the fake item name again
 			[3] = "Inv",
 			[4] = safe
 		}
 
-		-- Fire the inventory event with the original tool
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsOriginalToInv))
+		-- Fire the inventory event with the fake item name
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
+		
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
 
-		task.wait(0.5)
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
 
-		-- Move the original tool back to the character
-		tool.Parent = character
-
-		print("Duplication attempt using original and fake items completed.")
+		print("Duplication completed.")
 	else
 		warn("Tool or Safe not found.")
 	end
 end)
-
 
