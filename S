@@ -167,6 +167,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 			-- Teleport back to the original position
 			character.HumanoidRootPart.CFrame = originalPosition
+			task.wait(2)
 
 			local fakeArgsInv = {
 				[1] = "Change",
