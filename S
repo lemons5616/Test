@@ -167,10 +167,10 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Fire requests to replicate the duplication effect
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsOriginalToStorage))
-		task.wait(0.2)
+		task.wait(2)
 
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsFakeToInv))
-		task.wait(0.5)
+		task.wait(1)
 
 		-- Return the original tool to the character to complete the dupe process
 		tool.Parent = character
