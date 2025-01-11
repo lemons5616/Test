@@ -160,8 +160,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Wait before returning the tool to the backpack
 		task.wait(2)
 
-		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = true
-
 		-- Prepare arguments for moving the tool back to the backpack
 		local argsBackToBackpack = {
 			[1] = "Change",
@@ -174,7 +172,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsBackToBackpack))
 				
 		task.wait(1)
-		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = false
 
 		print("Item duplication attempt completed.")
 	else
