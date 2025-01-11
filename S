@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Tha Bronx", "DarkTheme")
+local Window = Library.CreateLib("Tha Xploit", "Sentinel")
 local Combat = Window:NewTab("Combat")
 local Player = Window:NewTab("Player")
 local Utility = Window:NewTab("Utility")
@@ -12,6 +12,7 @@ local UtilitySection = Utility:NewSection("Utility")
 local PurchasingSection = Utility:NewSection("Purchasing")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
+-- BUYING
 local ricePurchaseCount = 0  -- Keeps track of rice purchases
 local grapePurchaseCount = 0
 local seedsPurchaseCount = 0
@@ -22,6 +23,8 @@ local buySeedsPrompt = workspace:WaitForChild("GUNS"):WaitForChild("Seeds"):Wait
 local ricePrice = 3500
 local grapePrice = 500
 local seedsPrice = 1000
+local minBuyValue = 1
+local maxBuyValue = 100
 
 local function createWarningGui(message)
 	local screenGui = Instance.new("ScreenGui")
@@ -155,16 +158,16 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 	local playerMoney = game:GetService("Players").LocalPlayer.stored.Money.Value -- Fetch the actual numeric value
 
 	if (currentOption == "GrapeDrank") then
-		for i = 1, grapePurchaseCount do
-			if playerMoney >= grapePrice then
+		if (playerMoney >= grapePrice) then
+			for i = 1, grapePurchaseCount do
 				local args = {
 					[1] = "GrapeDrank"
 				}
 
 				game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
-			else
-				createWarningGui("Not enough money to buy grape drank!")
 			end
+		else
+			createWarningGui("Not enough money to buy grape drank!")
 		end
 	elseif (currentOption == "Rice") then
 		if ricePurchaseCount <= 0 then
@@ -247,15 +250,15 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 	end
 end)
 
-PurchasingSection:NewSlider("GrapeQuantity", "Select how many times to buy grape dranks", 100, 1, function(sliderValue)
+PurchasingSection:NewSlider("GrapeQuantity", "Select how many times to buy grape dranks", maxBuyValue, minBuyValue, function(sliderValue)
 	grapePurchaseCount = sliderValue
 end)
 
-PurchasingSection:NewSlider("RiceQuantity", "Select how many times to buy rice", 100, 1, function(sliderValue)
+PurchasingSection:NewSlider("RiceQuantity", "Select how many times to buy rice", maxBuyValue, minBuyValue, function(sliderValue)
 	ricePurchaseCount = sliderValue
 end)
 
-PurchasingSection:NewSlider("SeedsQuantity", "Select how many times to buy seeds", 100, 1, function(sliderValue)
+PurchasingSection:NewSlider("SeedsQuantity", "Select how many times to buy seeds", maxBuyValue, minBuyValue, function(sliderValue)
 	seedsPurchaseCount = sliderValue
 end)
 
