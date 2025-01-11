@@ -170,6 +170,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		if randomChestClicker then
 			-- Teleport to the random safe
 			character.HumanoidRootPart.CFrame = randomChestClicker.CFrame
+			
+			task.wait(0.5)
 
 			local fakeArgsBackpack = {
 				[1] = "Change",
@@ -181,12 +183,14 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
 			task.wait(2)
 
+			-- Teleport back to the original position
+			character.HumanoidRootPart.CFrame = originalPosition
+
 			-- Find the nearest safe to the original position
 			local nearestSafe = getNearestSafe()
 			local nearestChestClicker = nearestSafe and nearestSafe:FindFirstChild("ChestClicker")
-
-			-- Teleport back to the original position
-			character.HumanoidRootPart.CFrame = originalPosition
+			
+			task.wait(0.5)
 
 			local fakeArgsInv = {
 				[1] = "Change",
