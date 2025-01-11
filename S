@@ -154,6 +154,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		if chestClicker then
 			-- Teleport to the chosen safe
 			character.HumanoidRootPart.CFrame = chestClicker.CFrame
+			task.wait(1)
 
 			local fakeArgsBackpack = {
 				[1] = "Change",
