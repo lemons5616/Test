@@ -12,6 +12,13 @@ local UtilitySection = Utility:NewSection("Utility")
 local PurchasingSection = Utility:NewSection("Purchasing")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
+local ricePurchaseCount = 0  -- Keeps track of rice purchases
+local riceBuyLocation = CFrame.new(51373.3594, 21680.2383, 5842.92969, 0.986435831, -1.52454032e-08, -0.164147288, 1.49616994e-08, 1, -2.96470071e-09, 0.164147288, 4.68564743e-10, 0.986435831)
+
+PurchasingSection:NewSlider("Buy Rice", "Select how many times to buy rice", 100, 0, function(sliderValue)
+	ricePurchaseCount = sliderValue
+end)
+
 GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.", function()
 	local function findModuleScriptInCharacter(character, moduleName)
 		for _, descendant in ipairs(character:GetDescendants()) do
@@ -128,11 +135,36 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 
 		game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
 	elseif (currentOption == "Rice") then
-		local args = {
-			[1] = "RiceBag"
-		}
+		if ricePurchaseCount <= 0 then
+			warn("Set a value greater than 0 to buy rice.")
+			return
+		end
 
-		game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
+		local player = game.Players.LocalPlayer
+		local character = player.Character
+		if not character or not character:FindFirstChild("HumanoidRootPart") then
+			warn("Character or HumanoidRootPart not found.")
+			return
+		end
+
+		local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
+
+		-- Teleport to buy location
+		character.HumanoidRootPart.CFrame = riceBuyLocation
+
+		-- Perform the buying sequence using the BuyPrompt
+		for i = 1, ricePurchaseCount do
+			if buyPrompt and buyPrompt:IsA("ProximityPrompt") then
+				fireproximityprompt(buyPrompt)  -- Trigger the BuyPrompt
+				wait(0.2)  -- Adjust delay if necessary
+			else
+				warn("BuyPrompt not found or incorrect type.")
+				break
+			end
+		end
+
+		-- Teleport back to the original position
+		character.HumanoidRootPart.CFrame = originalPosition
 	elseif (currentOption == "Seeds") then
 		local args = {
 			[1] = "Seeds"
@@ -140,6 +172,10 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 
 		game:GetService("ReplicatedStorage"):WaitForChild("ExoticShopRemote"):InvokeServer(unpack(args))
 	end
+end)
+
+PurchasingSection:NewSlider("HowManyRice", "Select how many times to buy rice", 500, 0, function(sliderValue)
+	ricePurchaseCount = sliderValue
 end)
 
 -- Define teleport locations
