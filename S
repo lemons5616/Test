@@ -161,6 +161,10 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
 
 		task.wait(2)
+		
+		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = true
+		
+		task.wait(0.5)
 
 		local fakeArgsInv = {
 			[1] = "Change",
@@ -172,9 +176,9 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Fire the inventory event with the fake item name
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
 		
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
-
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
+		task.wait(0.5)
+		
+		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = false
 
 		print("Duplication completed.")
 	else
