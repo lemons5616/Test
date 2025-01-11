@@ -28,11 +28,11 @@ local function createWarningGui(message)
 	textLabel.BackgroundColor3 = Color3.new(1, 0, 0) -- Red background for warning
 	textLabel.Text = message
 	textLabel.TextScaled = true
-	textLabel.TextColor3 = Color3.new(1, 1, 1)
+	textLabel.TextColor3 = Color3.new(255, 255, 255)
 	textLabel.Parent = screenGui
 
 	-- Remove the GUI after 1 second
-	delay(1, function()
+	delay(2, function()
 		screenGui:Destroy()
 	end)
 end
