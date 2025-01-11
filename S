@@ -142,49 +142,68 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local safes = safesContainer:GetChildren()
 	local originalPosition = character.HumanoidRootPart.CFrame
 
+	local function getNearestSafe()
+		local nearestSafe = nil
+		local shortestDistance = math.huge
+		for _, safe in ipairs(safes) do
+			local chestClicker = safe:FindFirstChild("ChestClicker")
+			if chestClicker then
+				local distance = (chestClicker.Position - originalPosition.Position).Magnitude
+				if distance < shortestDistance then
+					shortestDistance = distance
+					nearestSafe = safe
+				end
+			end
+		end
+		return nearestSafe
+	end
+
 	if tool and #safes > 0 then
 		-- Unequip the current tool first
 		player.Character.Humanoid:UnequipTools()
 		task.wait(0.5)
 
 		-- Choose a random safe
-		local safe = safes[math.random(1, #safes)]
-		local chestClicker = safe:FindFirstChild("ChestClicker")
+		local randomSafe = safes[math.random(1, #safes)]
+		local randomChestClicker = randomSafe:FindFirstChild("ChestClicker")
 
-		if chestClicker then
-			-- Teleport to the chosen safe
-			character.HumanoidRootPart.CFrame = chestClicker.CFrame
-			task.wait(1)
+		if randomChestClicker then
+			-- Teleport to the random safe
+			character.HumanoidRootPart.CFrame = randomChestClicker.CFrame
 
 			local fakeArgsBackpack = {
 				[1] = "Change",
 				[2] = tool.Name,
 				[3] = "Backpack",
-				[4] = safe
+				[4] = randomSafe
 			}
 
 			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
 			task.wait(2)
 
+			-- Find the nearest safe to the original position
+			local nearestSafe = getNearestSafe()
+			local nearestChestClicker = nearestSafe and nearestSafe:FindFirstChild("ChestClicker")
+
 			-- Teleport back to the original position
 			character.HumanoidRootPart.CFrame = originalPosition
-			task.wait(2)
 
 			local fakeArgsInv = {
 				[1] = "Change",
 				[2] = tool.Name,
 				[3] = "Inv",
-				[4] = safe
+				[4] = nearestSafe
 			}
 
 			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
 			print("Duplication attempt using fake item completed.")
 		else
-			warn("ChestClicker not found in the safe.")
+			warn("ChestClicker not found in the random safe.")
 		end
 	else
 		warn("Tool not found or no safes available.")
 	end
 end)
+
 
 
