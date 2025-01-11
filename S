@@ -33,9 +33,9 @@ GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.",
 		if settingModule then
 			local settings = require(gun)  -- Require the module script
 			settings.LimitedAmmoEnabled = false
-			settings.AmmoPerMag = 999999
-			settings.Ammo = 999999
-			settings.MaxAmmo = 999999
+			settings.AmmoPerMag = 9000000000
+			settings.Ammo = 9000000000
+			settings.MaxAmmo = 9000000000
 		else
 			warn("'Setting' ModuleScript not found in the character.")
 		end
@@ -138,44 +138,50 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
 	local tool = character:FindFirstChildOfClass("Tool")
-	local safe = workspace:WaitForChild("1# Map"):WaitForChild("Safe")
+	local map = workspace:WaitForChild("1# Map")
+	local safes = map:GetChildren() -- Assuming safes are direct children of the map
+	local originalPosition = character.HumanoidRootPart.CFrame
 
-	if tool and safe then
-		-- Teleport to the safe chest clicker frame
-		character.HumanoidRootPart.CFrame = safe:WaitForChild("ChestClicker").CFrame
-
-		-- Unequip the current tool
+	if tool and #safes > 0 then
+		-- Unequip the current tool first
 		player.Character.Humanoid:UnequipTools()
+		task.wait(0.5)
 
-		task.wait(0.1)
+		-- Choose a random safe
+		local safe = safes[math.random(1, #safes)]
+		local chestClicker = safe:FindFirstChild("ChestClicker")
 
-		-- Create a fake item for duplication attempt
-		local fakeToolName = tool.Name .. "_FakeClone" -- Append a unique identifier
-		local fakeArgsBackpack = {
-			[1] = "Change",
-			[2] = fakeToolName, -- Use the fake item name
-			[3] = "Backpack",
-			[4] = safe
-		}
+		if chestClicker then
+			-- Teleport to the chosen safe
+			character.HumanoidRootPart.CFrame = chestClicker.CFrame
 
-		-- Fire the backpack event with the fake item name
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
+			local fakeArgsBackpack = {
+				[1] = "Change",
+				[2] = tool.Name,
+				[3] = "Backpack",
+				[4] = safe
+			}
 
-		task.wait(5)
+			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
+			task.wait(2)
 
-		local fakeArgsInv = {
-			[1] = "Change",
-			[2] = fakeToolName, -- Use the fake item name again
-			[3] = "Inv",
-			[4] = safe
-		}
+			-- Teleport back to the original position
+			character.HumanoidRootPart.CFrame = originalPosition
 
-		-- Fire the inventory event with the fake item name
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
+			local fakeArgsInv = {
+				[1] = "Change",
+				[2] = tool.Name,
+				[3] = "Inv",
+				[4] = safe
+			}
 
-		print("Duplication attempt using fake item completed.")
+			game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
+			print("Duplication attempt using fake item completed.")
+		else
+			warn("ChestClicker not found in the safe.")
+		end
 	else
-		warn("Tool or Safe not found.")
+		warn("Tool not found or no safes available.")
 	end
 end)
 
