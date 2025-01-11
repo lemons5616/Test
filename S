@@ -179,6 +179,10 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		task.wait(0.5)
 		
 		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = false
+		
+		task.wait(0.25)
+		
+		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = true
 
 		print("Duplication completed.")
 	else
