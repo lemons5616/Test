@@ -16,10 +16,6 @@ local ricePurchaseCount = 0  -- Keeps track of rice purchases
 local riceBuyLocation = CFrame.new(51373.3594, 21680.2383, 5842.92969, 0.986435831, -1.52454032e-08, -0.164147288, 1.49616994e-08, 1, -2.96470071e-09, 0.164147288, 4.68564743e-10, 0.986435831)
 local buyRicePrompt = workspace:WaitForChild("GUNS"):WaitForChild("RiceBag"):WaitForChild("Over"):WaitForChild("Sign"):WaitForChild("BuyPrompt")
 
-PurchasingSection:NewSlider("Buy Rice", "Select how many times to buy rice", 100, 0, function(sliderValue)
-	ricePurchaseCount = sliderValue
-end)
-
 GunModSection:NewButton("Infinite Ammo", "Lets the player have unlimited ammo.", function()
 	local function findModuleScriptInCharacter(character, moduleName)
 		for _, descendant in ipairs(character:GetDescendants()) do
