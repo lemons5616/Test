@@ -138,8 +138,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
 	local tool = character:FindFirstChildOfClass("Tool")
-	local map = workspace:WaitForChild("1# Map")
-	local safes = map:GetChildren() -- Assuming safes are direct children of the map
+	local safesContainer = workspace:WaitForChild("1# Map"):WaitForChild("2 Crosswalks"):WaitForChild("Safes")
+	local safes = safesContainer:GetChildren()
 	local originalPosition = character.HumanoidRootPart.CFrame
 
 	if tool and #safes > 0 then
@@ -184,4 +184,5 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		warn("Tool not found or no safes available.")
 	end
 end)
+
 
