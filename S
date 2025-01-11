@@ -141,52 +141,44 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local safe = workspace:WaitForChild("1# Map"):WaitForChild("Safe")
 
 	if tool and safe then
-		-- Teleport to the safe chest clicker frame
-		character.HumanoidRootPart.CFrame = safe:WaitForChild("ChestClicker").CFrame
-
-		-- Unequip the current tool
+		-- Unequip the current tool to start the duplication process
 		player.Character.Humanoid:UnequipTools()
-		
-		task.wait(0.25)
 
-		-- Create a fake item for duplication attempt
-		local fakeArgsBackpack = {
+		task.wait(0.5)
+
+		-- Prepare arguments for sending the original tool to storage
+		local argsOriginalToStorage = {
 			[1] = "Change",
-			[2] = tool.Name, -- Use the fake item name
+			[2] = tool.Name, -- Use the original tool name
 			[3] = "Backpack",
 			[4] = safe
 		}
 
-		-- Fire the backpack event with the fake item name
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsBackpack))
+		-- Prepare arguments to simulate duplication using a fake clone
+		local clonedTool = tool:Clone()
+		clonedTool.Name = "Fake" .. tool.Name
 
-		task.wait(2)
-		
-		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = true
-		
-		task.wait(0.5)
-
-		local fakeArgsInv = {
+		local argsFakeToInv = {
 			[1] = "Change",
-			[2] = tool.Name, -- Use the fake item name again
+			[2] = clonedTool.Name, -- Use the fake cloned tool name
 			[3] = "Inv",
 			[4] = safe
 		}
 
-		-- Fire the inventory event with the fake item name
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(fakeArgsInv))
-		
-		task.wait(0.5)
-		
-		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = false
-		
-		task.wait(0.25)
-		
-		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.Background.Front.Monitor.Disabled = true
+		-- Fire requests to replicate the duplication effect
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsOriginalToStorage))
+		task.wait(0.2)
 
-		print("Duplication completed.")
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsFakeToInv))
+		task.wait(0.5)
+
+		-- Return the original tool to the character to complete the dupe process
+		tool.Parent = character
+
+		print("Item duplication attempt completed.")
 	else
 		warn("Tool or Safe not found.")
 	end
 end)
+
 
