@@ -173,9 +173,9 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 
 		-- Loop to buy rice
 		for i = 1, ricePurchaseCount do
-			local playerMoney = game:GetService("Players").LocalPlayer.stored.Money -- Fetch player's current money
+			local playerMoney = game:GetService("Players").LocalPlayer.stored.Money.Value -- Fetch the actual numeric value
 
-			if playerMoney.Value >= ricePrice then
+			if playerMoney >= ricePrice then
 				if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
 					local holdTime = buyRicePrompt.HoldDuration or 0 -- Get the hold duration or default to 0
 					buyRicePrompt:InputHoldBegin() -- Trigger the start of the prompt
