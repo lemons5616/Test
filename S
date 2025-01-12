@@ -472,6 +472,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		
 		wait(0.5)
 		
+		game:GetService("Players").LocalPlayer.GameplayPaused = true
+		
 		-- Send the current item to the safe
 		local args3 = {
 			[1] = "Change",
@@ -483,8 +485,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		wait(2)
 		
-		game:GetService("Players").LocalPlayer.GameplayPaused = true
-		wait(0.01)
+		game:GetService("Players").LocalPlayer.GameplayPaused = false
 
 		-- Send the current item to the safe
 		local args2 = {
