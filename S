@@ -472,7 +472,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		
 		wait(0.5)
 		
-		task.spawn(shared.CloseBackpack)
+		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.SafeModel.Value = nil
 		
 		wait(0.5)
 		
