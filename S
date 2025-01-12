@@ -451,8 +451,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	-- Unequip all tools
 	character.Humanoid:UnequipTools()
 
-	-- Get the currently equipped tool from the player's backpack
-	local equippedTool = player.Backpack:FindFirstChildOfClass("Tool")
+	-- Get the currently equipped tool from the player's character (RightHand, LeftHand, etc.)
+	local equippedTool = character:FindFirstChildOfClass("Tool")
 	if not equippedTool then
 		warn("No tool is currently equipped.")
 		return
@@ -469,8 +469,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Teleport the player to the random safe's position
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
-		
-		wait(1)
 
 		-- Send the current item to the safe
 		local args = {
@@ -480,6 +478,12 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
+
+		-- Clone the equipped tool
+		local clonedTool = equippedTool:Clone()
+
+		-- Parent the cloned tool to the player's backpack
+		clonedTool.Parent = player.Backpack
 	end
 end)
 
