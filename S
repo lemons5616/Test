@@ -481,10 +481,29 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
 		
-		wait(2)
+		wait(1)
 		
 		local test = tool:Clone()
-		test.Parent = player.Backpack
+		
+		local args2 = {
+			[1] = "Change",
+			[2] = test.Name,
+			[3] = "Backpack",
+			[4] = randomSafe
+		}
+
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args2))
+		
+		wait(1)
+		
+		local args3 = {
+			[1] = "Change",
+			[2] = test.Name,
+			[3] = "Inv",
+			[4] = randomSafe
+		}
+
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args3))
 		
 		wait(1)
 		character:SetPrimaryPartCFrame(originalPosition)
@@ -495,3 +514,6 @@ end)
 ExploitSection:NewButton("NoMoneyLimit (BETA)", "No Description.", function()
 	game.Players.LocalPlayer:SetAttribute("MaxMoney", math.huge)
 end)
+
+
+
