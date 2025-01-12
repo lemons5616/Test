@@ -155,7 +155,68 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 			settings.BurstFireEnabled = true
 			settings.BulletPerBurst = 1
 			settings.BurstRate = 1 / 10000
-			print("Test: ".. settings.Ammo)
+		else
+			warn("'Setting' ModuleScript not found in the character.")
+		end
+	else
+		warn("LocalPlayer not found.")
+	end
+end)
+
+GunModSection:NewButton("No Recoil", "No recoil on the gun you are equipping.", function()
+	local function findModuleScriptInCharacter(character, moduleName)
+		for _, descendant in ipairs(character:GetDescendants()) do
+			if descendant:IsA("ModuleScript") and descendant.Name == moduleName then
+				return descendant
+			end
+		end
+		return nil  -- Return nil if not found
+	end
+
+	-- Main execution
+	local Players = game:GetService("Players")
+	local Workspace = game:GetService("Workspace")
+
+	local localPlayer = Players.LocalPlayer  -- Get the local player
+	if localPlayer then
+		local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()  -- Wait if character not yet loaded
+		local settingModule = findModuleScriptInCharacter(character, "Setting")
+		local gun = settingModule  -- Assigning the found moduleScript to 'gun'
+
+		if settingModule then
+			local settings = require(gun)  -- Require the module script
+			settings.Recoil = 0
+		else
+			warn("'Setting' ModuleScript not found in the character.")
+		end
+	else
+		warn("LocalPlayer not found.")
+	end
+end)
+
+GunModSection:NewButton("Infinite Damage", "Sets the damage of the gun infinite (May not work.)", function()
+	local function findModuleScriptInCharacter(character, moduleName)
+		for _, descendant in ipairs(character:GetDescendants()) do
+			if descendant:IsA("ModuleScript") and descendant.Name == moduleName then
+				return descendant
+			end
+		end
+		return nil  -- Return nil if not found
+	end
+
+	-- Main execution
+	local Players = game:GetService("Players")
+	local Workspace = game:GetService("Workspace")
+
+	local localPlayer = Players.LocalPlayer  -- Get the local player
+	if localPlayer then
+		local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()  -- Wait if character not yet loaded
+		local settingModule = findModuleScriptInCharacter(character, "Setting")
+		local gun = settingModule  -- Assigning the found moduleScript to 'gun'
+
+		if settingModule then
+			local settings = require(gun)  -- Require the module script
+			settings.BaseDamage = math.huge
 		else
 			warn("'Setting' ModuleScript not found in the character.")
 		end
@@ -179,8 +240,23 @@ PlayerSection:NewButton("Instant Interact", "No waiting when interacting with pr
 	end)
 end)
 
-PlayerSection:NewButton("NoFallDamage", "Makes the player take no fall damage when falling.", function()
-	game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll.Damage:Destroy()
+PlayerSection:NewToggle("NoFallDamage", "Makes the player take no fall damage when falling.", function(state)
+	if state then
+		game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll.Damage.Parent = game.ReplicatedStorage
+	else
+		game.ReplicatedStorage:WaitForChild("Damage").Parent = game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll
+	end
+end)
+
+PlayerSection:NewToggle("God Mode", "Makes the player take no damage.", function(state)
+	local player = game.Players.LocalPlayer
+	if state then
+		-- Set player to the 'Prisoner' team
+		player.Team = game:GetService("Teams").Prisoner
+	else
+		-- Set player to neutral (assuming Neutral is a default or existing team)
+		player.Team = game:GetService("Teams").Neutral
+	end
 end)
 
 PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seeds"}, function(currentOption)
@@ -392,7 +468,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		local randomSafe = safes[math.random(1, #safes)]
 
 		-- Teleport the player to the random safe's position
-		character:SetPrimaryPartCFrame(randomSafe.PrimaryPart.CFrame)
+		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
 	end
 end)
 
