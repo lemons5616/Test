@@ -150,7 +150,7 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 	end
 end)
 
-PlayerSection:NewButton("Insta Interact", "No delay when interacting with prompts.", function()
+PlayerSection:NewButton("Instant Interact", "No waiting when interacting with prompts.", function()
 	for _, prompt in pairs(game:GetDescendants()) do
 		if prompt:IsA("ProximityPrompt") then
 			prompt.HoldDuration = 0
