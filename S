@@ -469,14 +469,14 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
 
 		player.Character.Humanoid:UnequipTools()
-
+		
 		wait(0.5)
-
+		
 		local clone = tool:Clone()
 		clone.Parent = player.Backpack
-
+		
 		wait(0.01)
-
+		
 		-- Send the current item to the safe
 		local argsTrue = {
 			[1] = "Change",
@@ -485,7 +485,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsTrue))
-
+		
 		-- Send the current item to the safe
 		local argsFalse = {
 			[1] = "Change",
@@ -494,17 +494,17 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsFalse))
-
+		
 		wait(1)
 		-- Send the current item to the safe
-		local argsTrue2 = {
+		local argsFalse2 = {
 			[1] = "Change",
 			[2] = tool.Name,  -- Using the equipped tool's name
 			[3] = "Inv",
 			[4] = randomSafe -- Send to the safe
 		}
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsTrue2))
-
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsFalse2))
+		
 	end
 end)
 
