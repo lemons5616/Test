@@ -150,6 +150,20 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 	end
 end)
 
+PlayerSection:NewButton("Insta Interact", "No delay when interacting with prompts.", function()
+	for _, prompt in pairs(game:GetDescendants()) do
+		if prompt:IsA("ProximityPrompt") then
+			prompt.HoldDuration = 0
+		end
+	end
+
+
+	game.DescendantAdded:Connect(function(descendant)
+		if descendant:IsA("ProximityPrompt") then
+			descendant.HoldDuration = 0
+		end
+	end)
+end)
 
 PlayerSection:NewButton("NoFallDamage", "Makes the player take no fall damage when falling.", function()
 	game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll.Damage:Destroy()
@@ -292,21 +306,6 @@ UtilitySection:NewDropdown("Teleports", "Select a location to teleport", {
 			break
 		end
 	end
-end)
-
-PlayerSection:NewButton("Insta Interact", "No delay when interacting with prompts.", function()
-	for _, prompt in pairs(game:GetDescendants()) do
-		if prompt:IsA("ProximityPrompt") then
-			prompt.HoldDuration = 0
-		end
-	end
-
-
-	game.DescendantAdded:Connect(function(descendant)
-		if descendant:IsA("ProximityPrompt") then
-			descendant.HoldDuration = 0
-		end
-	end)
 end)
 
 MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", function()
