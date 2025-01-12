@@ -469,6 +469,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Teleport the player to the random safe's position
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
+		
+		wait(0.5)
 
 		-- Send the current item to the safe
 		local args = {
