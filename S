@@ -314,7 +314,7 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 
 						-- Ensure the player is close to the prompt
 						character:SetPrimaryPartCFrame(part.Parent.CFrame)
-						wait(0.5) -- Give it a small delay to ensure the player has time to move to the prompt
+						wait(0.1) -- Give it a small delay to ensure the player has time to move to the prompt
 
 						-- Trigger the ProximityPrompt
 						local prompt = part.Parent:FindFirstChildOfClass("ProximityPrompt")
