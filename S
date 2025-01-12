@@ -286,7 +286,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					local holdTime = buyRicePrompt.HoldDuration or 0
 					buyRicePrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime + 0.5)
+						wait(holdTime + 1)
 					else
 						wait(3)
 					end
@@ -327,7 +327,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					local holdTime = buySeedsPrompt.HoldDuration or 0
 					buySeedsPrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime + 0.5)
+						wait(holdTime + 1)
 					else
 						wait(3)
 					end
@@ -417,6 +417,8 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 								prompt:InputHoldEnd()
 								promptFound = true
 							end
+						else
+							createWarningGui("This has already been stealed by you or someone else.")
 						end
 
 						break
