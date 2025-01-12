@@ -286,7 +286,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					local holdTime = buyRicePrompt.HoldDuration or 0
 					buyRicePrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime + 2)
+						wait(holdTime + 1)
 					else
 						wait(3)
 					end
@@ -327,7 +327,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					local holdTime = buySeedsPrompt.HoldDuration or 0
 					buySeedsPrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime + 2)
+						wait(holdTime + 1)
 					else
 						wait(3)
 					end
@@ -410,10 +410,8 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 							local prompt = part.Parent:FindFirstChildOfClass("ProximityPrompt")
 							if prompt then
 								-- Simulate holding the prompt to trigger the action
-								for i = 1, 3 do
-									prompt:InputHoldBegin()
-								end
-								wait(0.1) -- Hold for a brief moment before ending the action
+								prompt:InputHoldBegin()
+								wait(0.01) -- Hold for a brief moment before ending the action
 								prompt:InputHoldEnd()
 								promptFound = true
 							end
