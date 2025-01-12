@@ -291,7 +291,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 						wait(3)
 					end
 					buyRicePrompt:InputHoldEnd()
-					wait(0.1)
+					wait(1)
 				else
 					warn("BuyPrompt not found or incorrect type.")
 					break
@@ -332,7 +332,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 						wait(3)
 					end
 					buySeedsPrompt:InputHoldEnd()
-					wait(0.1)
+					wait(1)
 				else
 					warn("BuyPrompt not found or incorrect type.")
 					break
