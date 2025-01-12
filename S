@@ -374,7 +374,7 @@ UtilitySection:NewDropdown("Teleports", "Select a location to teleport", {
 	end
 end)
 
-MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", function()
+MoneySection:NewButton("Rob 'On The Radar' Studio", "Automatically robs 'On The Radar' studio.", function()
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
 
@@ -465,12 +465,9 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Choose a random safe
 		local randomSafe = safes[math.random(1, #safes)]
 
+		player.Character.Humanoid:UnequipTools()
 		-- Teleport the player to the random safe's position
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
-
-		player.Character.Humanoid:UnequipTools()
-		
-		wait(0.1)
 		
 		local args = {
 			[1] = "Change",
