@@ -297,12 +297,12 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					local holdTime = buyRicePrompt.HoldDuration or 0
 					buyRicePrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime)
+						wait(holdTime + 0.5)
 					else
 						wait(3)
 					end
 					buyRicePrompt:InputHoldEnd()
-					wait(0.5)
+					wait(0.1)
 				else
 					warn("BuyPrompt not found or incorrect type.")
 					break
@@ -338,12 +338,12 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					local holdTime = buySeedsPrompt.HoldDuration or 0
 					buySeedsPrompt:InputHoldBegin()
 					if holdTime > 0 then
-						wait(holdTime)
+						wait(holdTime + 0.5)
 					else
 						wait(3)
 					end
 					buySeedsPrompt:InputHoldEnd()
-					wait(0.5)
+					wait(0.1)
 				else
 					warn("BuyPrompt not found or incorrect type.")
 					break
