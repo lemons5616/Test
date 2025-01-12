@@ -10,6 +10,7 @@ local EnviromentSection = Combat:NewSection("Environment")
 local PlayerSection = Player:NewSection("Player Modifications")
 local UtilitySection = Utility:NewSection("Utility")
 local PurchasingSection = Utility:NewSection("Purchasing")
+local MoneySection = Utility:NewSection("Money")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
 -- BUYING
@@ -24,7 +25,7 @@ local ricePrice = 3500
 local grapePrice = 500
 local seedsPrice = 1000
 local minBuyValue = 1
-local maxBuyValue = 100
+local maxBuyValue = 50
 
 local function createWarningGui(message)
 	local screenGui = Instance.new("ScreenGui")
@@ -287,6 +288,48 @@ UtilitySection:NewDropdown("Teleports", "Select a location to teleport", {
 			break
 		end
 	end
+end)
+
+MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", function()
+	local player = game:GetService("Players").LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+
+	-- Function to teleport the player to a random mesh inside the StudioPay model and trigger the prompt
+	local function robStudioPay(modelName)
+		local moneyFolder = workspace:WaitForChild("StudioPay"):WaitForChild("Money")
+		local model = moneyFolder:WaitForChild(modelName)
+		local meshes = model:GetChildren()
+		local promptFound = false
+
+		-- Loop through all meshes inside the model
+		for _, mesh in ipairs(meshes) do
+			if mesh:IsA("MeshPart") or mesh:IsA("Model") then
+				local meshParts = mesh:GetChildren()
+
+				-- Check for a ProximityPrompt inside the mesh
+				for _, part in ipairs(meshParts) do
+					if part:IsA("ProximityPrompt") then
+						-- Set the duration to 0
+						part.HoldDuration = 0
+						-- Teleport the player to this mesh's position
+						character:SetPrimaryPartCFrame(part.Parent.CFrame)
+						-- Trigger the prompt
+						part:InputHoldBegin()
+						wait(part.HoldDuration)
+						part:InputHoldEnd()
+						promptFound = true
+						break
+					end
+				end
+			end
+			if promptFound then break end
+		end
+	end
+
+	-- Trigger the robbing process for each model
+	robStudioPay("StudioPay1")
+	robStudioPay("StudioPay2")
+	robStudioPay("StudioPay3")
 end)
 
 ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
