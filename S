@@ -414,7 +414,11 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 								prompt:InputHoldBegin()
 								wait(0.01) -- Hold for a brief moment before ending the action
 								prompt:InputHoldEnd()
-								wait(0.1)
+								-- Simulate holding the prompt to trigger the action
+								prompt:InputHoldBegin()
+								wait(0.01) -- Hold for a brief moment before ending the action
+								prompt:InputHoldEnd()
+								wait(0.2)
 								promptFound = true
 							end
 						else
