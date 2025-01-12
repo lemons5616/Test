@@ -246,17 +246,6 @@ PlayerSection:NewToggle("NoFallDamage", "Makes the player take no fall damage wh
 	end
 end)
 
-PlayerSection:NewToggle("God Mode", "Makes the player take no damage.", function(state)
-	local player = game.Players.LocalPlayer
-	if state then
-		-- Set player to the 'Prisoner' team
-		player.Team = game:GetService("Teams").Prisoner
-	else
-		-- Set player to neutral (assuming Neutral is a default or existing team)
-		player.Team = game:GetService("Teams").Neutral
-	end
-end)
-
 PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seeds"}, function(currentOption)
 	local playerMoney = game:GetService("Players").LocalPlayer.stored.Money.Value -- Fetch the actual numeric value
 
@@ -370,7 +359,7 @@ PurchasingSection:NewSlider("SeedsQuantity", "Select how many times to buy seeds
 end)
 
 UtilitySection:NewDropdown("Teleports", "Select a location to teleport", {
-	"Guns Shop 1", "Guns Shop 2", "Hotel Hall", "Laundry", 
+	"Guns Shop 1", "Guns Shop 2", "Guns Shop 3 (Exotic Guns)", "Hotel Hall", "Laundry", 
 	"Rice Purchaser", "Exotic Dealer", "Bank", "Weed Purchaser"
 }, function(selected)
 	for _, location in ipairs(teleportLocations) do
