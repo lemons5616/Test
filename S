@@ -453,6 +453,9 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		return
 	end
 
+	-- Save the current position
+	local originalPosition = character.PrimaryPart and character.PrimaryPart.CFrame or nil
+
 	-- Get the safes
 	local safesContainer = workspace:WaitForChild("1# Map"):WaitForChild("2 Crosswalks"):WaitForChild("Safes")
 	local safes = safesContainer:GetChildren()
@@ -464,10 +467,10 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Teleport the player to the random safe's position
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
-		
-		wait(0.5)
-		
+
 		player.Character.Humanoid:UnequipTools()
+
+		wait(0.5)
 
 		-- Send the current item to the safe
 		local args3 = {
@@ -477,17 +480,24 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args3))
-		
-		wait(0.05)
+
+		wait(2)
 
 		-- Send the current item to the safe
-		local args3 = {
+		local args2 = {
 			[1] = "Change",
 			[2] = tool.Name,  -- Using the equipped tool's name
 			[3] = "Inv",
 			[4] = randomSafe -- Send to the safe
 		}
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args3))
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args2))
+		
+		wait(0.25)
+
+		-- Return to the original position
+		if originalPosition then
+			character:SetPrimaryPartCFrame(originalPosition)
+		end
 	end
 end)
 
