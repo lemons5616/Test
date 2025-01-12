@@ -469,8 +469,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		-- Teleport the player to the random safe's position
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
-		
-		wait(0.25)
 
 		-- Send the current item to the safe
 		local args = {
@@ -480,20 +478,12 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
-		
-		wait(2)
 
 		-- Clone the equipped tool
 		local clonedTool = equippedTool:Clone()
-		
-		-- Send the current item to the safe
-		local args2 = {
-			[1] = "Change",
-			[2] = clonedTool.Name,  -- Using the equipped tool's name
-			[3] = "Inv",
-			[4] = randomSafe -- Send to the safe
-		}
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args2))
+
+		-- Parent the cloned tool to the player's backpack
+		clonedTool.Parent = player.Backpack
 	end
 end)
 
