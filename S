@@ -188,7 +188,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 			local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
 			character.HumanoidRootPart.CFrame = riceBuyLocation -- Teleport to rice buy location
 			
-			wait(0.5)
+			wait(0.25)
 
 			for i = 1, ricePurchaseCount do
 				if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
@@ -197,7 +197,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					if holdTime > 0 then
 						wait(holdTime)
 					else
-						wait(1)
+						wait(2)
 					end
 					buyRicePrompt:InputHoldEnd()
 					wait(0.2)
@@ -229,7 +229,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 			local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
 			character.HumanoidRootPart.CFrame = seedsBuyLocation -- Teleport to seeds buy location
 			
-			wait(0.5)
+			wait(0.25)
 
 			for i = 1, seedsPurchaseCount do
 				if buySeedsPrompt and buySeedsPrompt:IsA("ProximityPrompt") then
@@ -238,7 +238,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					if holdTime > 0 then
 						wait(holdTime)
 					else
-						wait(1)
+						wait(2)
 					end
 					buySeedsPrompt:InputHoldEnd()
 					wait(0.2)
@@ -292,6 +292,21 @@ UtilitySection:NewDropdown("Teleports", "Select a location to teleport", {
 			break
 		end
 	end
+end)
+
+PlayerSection:NewButton("Insta Interact", "No delay when interacting with prompts.", function()
+	for _, prompt in pairs(game:GetDescendants()) do
+		if prompt:IsA("ProximityPrompt") then
+			prompt.HoldDuration = 0
+		end
+	end
+
+
+	game.DescendantAdded:Connect(function(descendant)
+		if descendant:IsA("ProximityPrompt") then
+			descendant.HoldDuration = 0
+		end
+	end)
 end)
 
 MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", function()
