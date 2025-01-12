@@ -470,12 +470,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		player.Character.Humanoid:UnequipTools()
 		
-		wait(0.5)
-		
-		game:GetService("Players").LocalPlayer.PlayerGui.Inventory.SafeModel.Value = nil
-		
-		wait(0.5)
-		
 		local args = {
 			[1] = "Change",
 			[2] = tool.Name,
