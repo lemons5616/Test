@@ -481,7 +481,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		local toolClone = tool:Clone()
 		toolClone.Parent = player.Backpack
 		
-		wait(1)
 		-- Send the current item to the safe
 		local args = {
 			[1] = "Change",
