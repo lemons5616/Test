@@ -187,6 +187,8 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 		if playerMoney >= ricePrice then
 			local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
 			character.HumanoidRootPart.CFrame = riceBuyLocation -- Teleport to rice buy location
+			
+			wait(0.5)
 
 			for i = 1, ricePurchaseCount do
 				if buyRicePrompt and buyRicePrompt:IsA("ProximityPrompt") then
@@ -226,6 +228,8 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 		if playerMoney >= seedsPrice then
 			local originalPosition = character.HumanoidRootPart.CFrame  -- Save the original position
 			character.HumanoidRootPart.CFrame = seedsBuyLocation -- Teleport to seeds buy location
+			
+			wait(0.5)
 
 			for i = 1, seedsPurchaseCount do
 				if buySeedsPrompt and buySeedsPrompt:IsA("ProximityPrompt") then
