@@ -3,14 +3,15 @@ local Window = Library.CreateLib("Tha Xploit", "Sentinel")
 local Combat = Window:NewTab("Combat")
 local Player = Window:NewTab("Player")
 local Utility = Window:NewTab("Utility")
+local AutoFarm = Window:NewTab("AutoFarm")
 local Exploit = Window:NewTab("Exploit")
 
 local GunModSection = Combat:NewSection("Gun Mods")
 local EnviromentSection = Combat:NewSection("Environment")
 local PlayerSection = Player:NewSection("Player Modifications")
 local UtilitySection = Utility:NewSection("Utility")
-local PurchasingSection = Utility:NewSection("Purchasing")
-local MoneySection = Utility:NewSection("Money")
+local PurchasingSection = AutoFarm:NewSection("Purchasing")
+local MoneySection = AutoFarm:NewSection("Money")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
 -- BUYING
@@ -334,9 +335,14 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 						if part.Enabled then
 							-- Set the duration to 0 to trigger it immediately
 							part.HoldDuration = 0
-
+							
 							-- Ensure the player is close to the prompt
-							character:SetPrimaryPartCFrame(part.Parent.CFrame)
+							local targetPosition = part.Parent.CFrame.Position
+							character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+							
+							-- Rotate the player to face the mesh part
+							local direction = (targetPosition - character.HumanoidRootPart.Position).unit
+							character:SetPrimaryPartCFrame(CFrame.new(targetPosition, targetPosition + direction))
 							wait(0.1) -- Give it a small delay to ensure the player has time to move to the prompt
 
 							-- Trigger the ProximityPrompt
