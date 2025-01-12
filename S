@@ -480,14 +480,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
-		
-		wait(0.5)
-
-		-- Clone the equipped tool
-		local clonedTool = equippedTool:Clone()
-
-		-- Parent the cloned tool to the player's backpack
-		clonedTool.Parent = player.Backpack
 	end
 end)
 
