@@ -470,6 +470,8 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		player.Character.Humanoid:UnequipTools()
 		
+		wait(0.1)
+		
 		local args = {
 			[1] = "Change",
 			[2] = tool.Name,
