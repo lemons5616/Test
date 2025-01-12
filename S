@@ -314,8 +314,8 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 						-- Teleport the player to this mesh's position
 						character:SetPrimaryPartCFrame(part.Parent.CFrame)
 						-- Trigger the prompt
+						wait(0.1)
 						part:InputHoldBegin()
-						wait(part.HoldDuration)
 						part:InputHoldEnd()
 						promptFound = true
 						break
