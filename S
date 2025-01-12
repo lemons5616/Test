@@ -479,6 +479,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
 		
 		local toolClone = tool:Clone()
+		toolClone.Parent = player.Backpack
 		
 		wait(1)
 		-- Send the current item to the safe
@@ -505,3 +506,6 @@ end)
 ExploitSection:NewButton("NoMoneyLimit (BETA)", "No Description.", function()
 	game.Players.LocalPlayer:SetAttribute("MaxMoney", math.huge)
 end)
+
+
+
