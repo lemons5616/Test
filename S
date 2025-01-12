@@ -294,6 +294,9 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
 
+	-- Store the player's original position before teleporting anywhere
+	local originalPosition = character.HumanoidRootPart.CFrame
+
 	-- Function to teleport the player to a random mesh inside the StudioPay model and trigger the prompt
 	local function robStudioPay(modelName)
 		local moneyFolder = workspace:WaitForChild("StudioPay"):WaitForChild("Money")
@@ -309,21 +312,24 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 				-- Check for a ProximityPrompt inside the mesh
 				for _, part in ipairs(meshParts) do
 					if part:IsA("ProximityPrompt") then
-						-- Set the duration to 0 to trigger it immediately
-						part.HoldDuration = 0
+						-- Check if the prompt is enabled before proceeding
+						if part.Enabled then
+							-- Set the duration to 0 to trigger it immediately
+							part.HoldDuration = 0
 
-						-- Ensure the player is close to the prompt
-						character:SetPrimaryPartCFrame(part.Parent.CFrame)
-						wait(0.1) -- Give it a small delay to ensure the player has time to move to the prompt
+							-- Ensure the player is close to the prompt
+							character:SetPrimaryPartCFrame(part.Parent.CFrame)
+							wait(0.1) -- Give it a small delay to ensure the player has time to move to the prompt
 
-						-- Trigger the ProximityPrompt
-						local prompt = part.Parent:FindFirstChildOfClass("ProximityPrompt")
-						if prompt then
-							-- Simulate holding the prompt to trigger the action
-							prompt:InputHoldBegin()
-							wait(0.1) -- Hold for a brief moment before ending the action
-							prompt:InputHoldEnd()
-							promptFound = true
+							-- Trigger the ProximityPrompt
+							local prompt = part.Parent:FindFirstChildOfClass("ProximityPrompt")
+							if prompt then
+								-- Simulate holding the prompt to trigger the action
+								prompt:InputHoldBegin()
+								wait(0.1) -- Hold for a brief moment before ending the action
+								prompt:InputHoldEnd()
+								promptFound = true
+							end
 						end
 
 						break
@@ -334,10 +340,14 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 		end
 	end
 
-	-- Trigger the robbing process for each model
+	-- Rob all three models
 	robStudioPay("StudioPay1")
 	robStudioPay("StudioPay2")
 	robStudioPay("StudioPay3")
+
+	-- After robbing all, teleport the player back to their original position
+	wait(0.5)  -- Wait a little to ensure everything has completed
+	character.HumanoidRootPart.CFrame = originalPosition
 end)
 
 ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
