@@ -14,6 +14,19 @@ local PurchasingSection = AutoFarm:NewSection("Purchasing")
 local MoneySection = AutoFarm:NewSection("Money")
 local ExploitSection = Exploit:NewSection("Useful Exploits")
 
+--TELEPORTING
+-- Define teleport locations
+local teleportLocations = {
+	{name = "Guns Shop 1", position = Vector3.new(-1006.58356, 254.004608, -817.199097)},
+	{name = "Guns Shop 2", position = Vector3.new(-129.877258, 282.965973, -796.901062)},
+	{name = "Hotel Hall", position = Vector3.new(-24.5520306, 416.43338, -454.355347)},
+	{name = "Laundry", position = Vector3.new(-982.799316, 252.941132, -682.534668)},
+	{name = "Rice Purchaser", position = Vector3.new(81065.0703, 133132.984, 167.565689)},
+	{name = "Exotic Dealer", position = Vector3.new(-1521.92236, 273.35968, -988.202942)},
+	{name = "Bank", position = Vector3.new(-130.178146, 283.632904, -1200.91504)},
+	{name = "Weed Purchaser", position = Vector3.new(-630.154541, 252.798019, -730.857178)},
+}
+
 -- BUYING
 local ricePurchaseCount = 0  -- Keeps track of rice purchases
 local grapePurchaseCount = 0
@@ -282,21 +295,9 @@ PurchasingSection:NewSlider("SeedsQuantity", "Select how many times to buy seeds
 	seedsPurchaseCount = sliderValue
 end)
 
--- Define teleport locations
-local teleportLocations = {
-	{name = "Guns Shop 1", position = Vector3.new(-1006.58356, 254.004608, -817.199097)},
-	{name = "Guns Shop 2", position = Vector3.new(-129.877258, 282.965973, -796.901062)},
-	{name = "Hotel Hall", position = Vector3.new(-24.5520306, 416.43338, -454.355347)},
-	{name = "Laundry", position = Vector3.new(-982.799316, 252.941132, -682.534668)},
-	{name = "Vendedor Arroz", position = Vector3.new(81065.0703, 133132.984, 167.565689)},
-	{name = "Exotic Dealer", position = Vector3.new(-1521.92236, 273.35968, -988.202942)},
-	{name = "Bank", position = Vector3.new(-130.178146, 283.632904, -1200.91504)},
-	{name = "Weed Seller", position = Vector3.new(-630.154541, 252.798019, -730.857178)},
-}
-
 UtilitySection:NewDropdown("Teleports", "Select a location to teleport", {
 	"Guns Shop 1", "Guns Shop 2", "Hotel Hall", "Laundry", 
-	"Vendedor Arroz", "Exotic Dealer", "Bank", "Weed Seller"
+	"Rice Purchaser", "Exotic Dealer", "Bank", "Weed Purchaser"
 }, function(selected)
 	for _, location in ipairs(teleportLocations) do
 		if location.name == selected then
