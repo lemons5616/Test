@@ -505,6 +505,3 @@ end)
 ExploitSection:NewButton("NoMoneyLimit (BETA)", "No Description.", function()
 	game.Players.LocalPlayer:SetAttribute("MaxMoney", math.huge)
 end)
-
-
-
