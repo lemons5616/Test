@@ -8,7 +8,7 @@ local Exploit = Window:NewTab("Exploit")
 
 local GunModSection = Combat:NewSection("Gun Mods")
 local EnviromentSection = Combat:NewSection("Environment")
-local PlayerSection = Player:NewSection("Player Modifications")
+local PlayerSection = Player:NewSection("Character Modifications")
 local UtilitySection = Utility:NewSection("Utility")
 local PurchasingSection = AutoFarm:NewSection("Purchasing")
 local MoneySection = AutoFarm:NewSection("Money")
@@ -246,6 +246,20 @@ PlayerSection:NewToggle("NoFallDamage", "Makes the player take no fall damage wh
 	end
 end)
 
+PlayerSection:NewToggle("NoBob", "Disables camera bobbing.", function(state)
+	if state then
+		local player = game:GetService("Players").LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		
+		character:WaitForChild("CameraBobbing").Disabled = true
+	else
+		local player = game:GetService("Players").LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+
+		character:WaitForChild("CameraBobbing").Disabled = false
+	end
+end)
+
 PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seeds"}, function(currentOption)
 	local playerMoney = game:GetService("Players").LocalPlayer.stored.Money.Value -- Fetch the actual numeric value
 
@@ -478,11 +492,29 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
 		
+		wait(2)
+		
+		
+		
 	end
 end)
 
 ExploitSection:NewButton("NoMoneyLimit (BETA)", "No Description.", function()
 	game.Players.LocalPlayer:SetAttribute("MaxMoney", math.huge)
+end)
+
+ExploitSection:NewToggle("SilentAcDisabler", "Disables the silent ac.", function(state)
+	if state then
+		local player = game:GetService("Players").LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		
+		character:WaitForChild("abcde").Disabled = true
+	else
+		local player = game:GetService("Players").LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+
+		character:WaitForChild("abcde").Disabled = false
+	end
 end)
 
 
