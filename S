@@ -238,6 +238,7 @@ PlayerSection:NewButton("Instant Interact", "No waiting when interacting with pr
 	end)
 end)
 
+
 PlayerSection:NewToggle("NoFallDamage", "Makes the player take no fall damage when falling.", function(state)
 	if state then
 		game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll.Damage.Parent = game.ReplicatedStorage
@@ -245,6 +246,15 @@ PlayerSection:NewToggle("NoFallDamage", "Makes the player take no fall damage wh
 		game.ReplicatedStorage:WaitForChild("Damage").Parent = game:GetService("Players").LocalPlayer.Character.FallDamageRagdoll
 	end
 end)
+
+PlayerSection:NewToggle("NoJumpCooldown", "Disables jump cooldown.", function(state)
+	if state then
+		game:GetService("Players").LocalPlayer.PlayerGui.JumpDebounce.LocalScript.Disabled = true
+	else
+		game:GetService("Players").LocalPlayer.PlayerGui.JumpDebounce.LocalScript.Disabled = false
+	end
+end)
+
 
 PlayerSection:NewToggle("NoBob", "Disables camera bobbing.", function(state)
 	if state then
