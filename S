@@ -471,6 +471,17 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		player.Character.Humanoid:UnequipTools()
 		
 		wait(0.5)
+
+		local test = tool:Clone()
+
+		local args2 = {
+			[1] = "Change",
+			[2] = test.Name,
+			[3] = "Backpack",
+			[4] = randomSafe
+		}
+
+		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args2))
 		
 		local args = {
 			[1] = "Change",
@@ -480,19 +491,6 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		}
 
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
-		
-		wait(1)
-		
-		local test = tool:Clone()
-		
-		local args2 = {
-			[1] = "Change",
-			[2] = test.Name,
-			[3] = "Backpack",
-			[4] = randomSafe
-		}
-
-		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args2))
 		
 		wait(1)
 		
