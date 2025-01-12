@@ -475,7 +475,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		local clone = tool:Clone()
 		clone.Parent = player.Backpack
 		
-		wait(0.1)
+		wait(0.01)
 		
 		-- Send the current item to the safe
 		local argsFalse = {
@@ -490,7 +490,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		local argsTrue = {
 			[1] = "Change",
 			[2] = tool.Name,  -- Using the equipped tool's name
-			[3] = "Backpack",
+			[3] = "Inv",
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(argsTrue))
@@ -500,7 +500,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		local True = {
 			[1] = "Change",
 			[2] = tool.Name,  -- Using the equipped tool's name
-			[3] = "Inv",
+			[3] = "Backpack",
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(True))
