@@ -419,7 +419,7 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 								prompt:InputHoldBegin()
 								wait(0.01) -- Hold for a brief moment before ending the action
 								prompt:InputHoldEnd()
-								wait(0.2)
+								wait(0.1)
 								promptFound = true
 							end
 						else
@@ -468,17 +468,23 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		wait(0.5)
 		
 		player.Character.Humanoid:UnequipTools()
-		
-		local clone = tool:Clone()
 
 		-- Send the current item to the safe
 		local args = {
 			[1] = "Change",
-			[2] = clone.Name,  -- Using the equipped tool's name
+			[2] = tool.Name,  -- Using the equipped tool's name
 			[3] = "Backpack",
 			[4] = randomSafe -- Send to the safe
 		}
 		game:GetService("ReplicatedStorage"):WaitForChild("Inventory"):FireServer(unpack(args))
+		
+		-- Clone the tool once it's inside the safe
+		wait(1)  -- Wait for a brief moment to ensure the tool is inside the safe
+
+		local toolClone = tool:Clone()
+
+		-- Place the cloned tool back into the player's backpack
+		toolClone.Parent = player.Backpack
 	end
 end)
 
