@@ -499,7 +499,7 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Send the current item to the safe
 		local True = {
 			[1] = "Change",
-			[2] = tool.Name,  -- Using the equipped tool's name
+			[2] = clone.Name,  -- Using the equipped tool's name
 			[3] = "Backpack",
 			[4] = randomSafe -- Send to the safe
 		}
