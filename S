@@ -447,13 +447,8 @@ end)
 ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 	local player = game:GetService("Players").LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
-
-	-- Unequip all tools
-	character.Humanoid:UnequipTools()
-
-	-- Get the currently equipped tool from the player's character (RightHand, LeftHand, etc.)
-	local equippedTool = character:FindFirstChildOfClass("Tool")
-	if not equippedTool then
+	local tool = character:FindFirstChildOfClass("Tool")
+	if not tool then
 		warn("No tool is currently equipped.")
 		return
 	end
@@ -471,11 +466,13 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
 		
 		wait(0.5)
+		
+		player.Character.Humanoid:UnequipTools()
 
 		-- Send the current item to the safe
 		local args = {
 			[1] = "Change",
-			[2] = equippedTool.Name,  -- Using the equipped tool's name
+			[2] = tool.Name,  -- Using the equipped tool's name
 			[3] = "Backpack",
 			[4] = randomSafe -- Send to the safe
 		}
