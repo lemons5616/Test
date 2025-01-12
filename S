@@ -195,7 +195,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					if holdTime > 0 then
 						wait(holdTime)
 					else
-						wait(2)
+						wait(1)
 					end
 					buyRicePrompt:InputHoldEnd()
 					wait(0.2)
@@ -234,7 +234,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					if holdTime > 0 then
 						wait(holdTime)
 					else
-						wait(2)
+						wait(1)
 					end
 					buySeedsPrompt:InputHoldEnd()
 					wait(0.2)
