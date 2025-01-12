@@ -19,6 +19,7 @@ local ExploitSection = Exploit:NewSection("Useful Exploits")
 local teleportLocations = {
 	{name = "Guns Shop 1", position = Vector3.new(-1006.58356, 254.004608, -817.199097)},
 	{name = "Guns Shop 2", position = Vector3.new(-129.877258, 282.965973, -796.901062)},
+	{name = "Guns Shop 3 (Exotic Guns)", position = Vector3.new(60837.8633, 87609.1328, -352.99649, -0.00811773632, 4.7308145e-08, 0.999967039, -6.28109453e-10, 1, -4.73148027e-08, -0.999967039, -1.01217779e-09, -0.00811773632)},
 	{name = "Hotel Hall", position = Vector3.new(-24.5520306, 416.43338, -454.355347)},
 	{name = "Laundry", position = Vector3.new(-982.799316, 252.941132, -682.534668)},
 	{name = "Rice Purchaser", position = Vector3.new(81065.0703, 133132.984, 167.565689)},
@@ -150,11 +151,8 @@ GunModSection:NewButton("Rapid Fire", "Lets the player fire gun rapidly.", funct
 
 		if settingModule then
 			local settings = require(gun)  -- Require the module script
-			settings.FireRate = 1 / 10000
+			settings.FireRate = 1 / 1000000
 			settings.Auto = true
-			settings.BurstFireEnabled = true
-			settings.BulletPerBurst = 1
-			settings.BurstRate = 1 / 10000
 		else
 			warn("'Setting' ModuleScript not found in the character.")
 		end
@@ -301,7 +299,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					if holdTime > 0 then
 						wait(holdTime)
 					else
-						wait(2)
+						wait(3)
 					end
 					buyRicePrompt:InputHoldEnd()
 					wait(0.2)
@@ -342,7 +340,7 @@ PurchasingSection:NewDropdown("Buy", "DropdownInf", {"GrapeDrank", "Rice", "Seed
 					if holdTime > 0 then
 						wait(holdTime)
 					else
-						wait(2)
+						wait(3)
 					end
 					buySeedsPrompt:InputHoldEnd()
 					wait(0.2)
@@ -416,10 +414,7 @@ MoneySection:NewButton("Rob StudioPay", "Automatically robs studio pay.", functi
 							-- Ensure the player is close to the prompt
 							local targetPosition = part.Parent.CFrame.Position
 							character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
-							
-							-- Rotate the player to face the mesh part
-							local direction = (targetPosition - character.HumanoidRootPart.Position).unit
-							character:SetPrimaryPartCFrame(CFrame.new(targetPosition, targetPosition + direction))
+
 							wait(0.1) -- Give it a small delay to ensure the player has time to move to the prompt
 
 							-- Trigger the ProximityPrompt
@@ -470,6 +465,10 @@ ExploitSection:NewButton("Dupe Item", "Dupe Items", function()
 		-- Teleport the player to the random safe's position
 		character:SetPrimaryPartCFrame(randomSafe.ChestClicker.CFrame)
 	end
+end)
+
+ExploitSection:NewButton("NoMoneyLimit (BETA)", "No Description.", function()
+	game.Players.LocalPlayer:SetAttribute("MaxMoney", math.huge)
 end)
 
 
